@@ -3,25 +3,35 @@ import React, { useContext, useState } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import {Button,Text,TextInput,View,StyleSheet,TouchableOpacity, Pressable,} from "react-native";
+import {
+  Button,
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import { Modal } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { TaskContext } from "@/components/TaskContext";
 import { Ionicons } from "@expo/vector-icons";
+import { DarkTheme } from "@react-navigation/native";
 
 export default function TabLayout() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inputs, setInputs] = useState<string[]>([""]);
   const [title, setTitle] = useState("");
-  
+
   const { addTask } = useContext(TaskContext) ?? { addTask: () => {} };
 
   const colorScheme = useColorScheme();
-  const themeTextStyle = colorScheme === "light" ? styles.lightThemeText : styles.darkThemeText;
+  const themeTextStyle =
+      colorScheme === "dark" ? styles.darkThemeText : styles.lightThemeText;
   const themeTextColor = colorScheme === "light" ? "#242c40" : "#d0d0c0";
 
-  interface  Activity{
+  interface Activity {
     name: string;
     state: boolean;
   }
@@ -31,12 +41,16 @@ export default function TabLayout() {
     isFinish: boolean;
     isArtchived: boolean;
   }
-  
 
   function handleSubmit() {
-    const filteredInputs = inputs.filter(input => input.slice() !== "");
+    const filteredInputs = inputs.filter((input) => input.slice() !== "");
     if (filteredInputs.length === 0) return; // Prevent submission if all inputs are empty
-    const newTask = { title, todo: filteredInputs.map(input => ({ name: input, state: false })), isFinish: false , isArtchived: false};
+    const newTask = {
+      title,
+      todo: filteredInputs.map((input) => ({ name: input, state: false })),
+      isFinish: false,
+      isArtchived: false,
+    };
     // console.log(newTask);
     addTask(newTask);
     setIsModalVisible(false);
@@ -57,9 +71,12 @@ export default function TabLayout() {
     <>
       <Tabs
         screenOptions={{
+          tabBarStyle: { backgroundColor: Colors[colorScheme ?? "light"].background , borderTopColor: Colors[colorScheme ?? "light"].tint, borderTopWidth: 1,height: 70},
+          tabBarLabelStyle: {height: 20},
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: false,
         }}
+    
       >
         <Tabs.Screen
           name="index"
@@ -83,11 +100,23 @@ export default function TabLayout() {
           })}
           name="placeHolder"
           options={{
-            title: "Add Task",
+            title: "",
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                name={focused ? "add-circle" : "add-circle-outline"}
+                size={60}
+                name={focused ? "add" : "add-outline"}
                 color={color}
+                style={{
+                  flexDirection: "column",
+                  marginBottom: 30,
+                  backgroundColor: "#00C2FF",
+                  borderRadius: 30,
+                  color: "white",
+                  width: 60,
+                  height: 60,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               />
             ),
           }}
@@ -137,7 +166,6 @@ export default function TabLayout() {
 
               {inputs.map((input, index) => (
                 <ThemedView
-                  
                   style={{
                     padding: 0,
                     borderRadius: 10,
@@ -149,11 +177,10 @@ export default function TabLayout() {
                   lightColor="#E8EAED"
                   key={index}
                 >
-                  <Pressable onPress={() => removeListItem(index)}  >
+                  <Pressable onPress={() => removeListItem(index)}>
                     <Ionicons name="close" size={20} color="red" />
                   </Pressable>
                   <TextInput
-                
                     autoFocus={index === inputs.length - 1}
                     style={[styles.input, themeTextStyle]}
                     placeholderTextColor={themeTextColor}
