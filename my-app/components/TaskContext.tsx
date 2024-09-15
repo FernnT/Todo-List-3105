@@ -19,6 +19,7 @@ interface TaskContextProps {
   updateTask: (index: number, updatedTask: Task) => void;
   deleteTask: (index: number,isArchived?:boolean ) => void;
   archiveTask: (index: number) => void;
+  restoreTask: (index: number) => void;
 }
  
 
@@ -56,8 +57,14 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     deleteTask(index);
   };
 
+  const restoreTask = (index: number) => {
+    const taskToRestore = archivedTasks[index];
+    setTasks([...tasks, { ...taskToRestore, isArchived: false }]);
+    deleteTask(index, true);
+  };
+
   return (
-    <TaskContext.Provider value={{ tasks, archivedTasks, addTask, updateTask, deleteTask, archiveTask }}>
+    <TaskContext.Provider value={{ tasks, archivedTasks, addTask, updateTask, deleteTask, archiveTask, restoreTask }}>
       {children}
     </TaskContext.Provider>
   );
