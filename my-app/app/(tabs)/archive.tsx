@@ -13,7 +13,7 @@ export default function Archive(){
   if (!taskContext) {
     return null; // or handle the error appropriately
   }
-  const { archivedTasks, deleteTask } = taskContext;
+  const { archivedTasks, deleteTask, restoreTask} = taskContext;
 
   return (
     <ThemedView style={styles.container} darkColor='#162427' lightColor='#E8EAED'>
@@ -30,9 +30,15 @@ export default function Archive(){
             <ThemedView darkColor='#162427' lightColor='#E8EAED' key={index} style={{ flexDirection: 'column-reverse' }}>
               <Task title={item.title} todo={item.todo} isFinish={item.isFinish} isArchived={true}/>
 
-              <Pressable style={{justifyContent:"flex-end",flexDirection:"row"}} onPress={()=>deleteTask(index,item.isArchived)}>
-                  <Ionicons name="trash" size={20} color="red" />
+               <ThemedView darkColor='#162427' lightColor='#E8EAED' style={{ flexDirection:'row',justifyContent:"space-between"}}>
+              <Pressable onPress={()=>deleteTask(index,item.isArchived)}>
+                  <Ionicons name="trash" size={25} color="red" />
               </Pressable>
+              <Pressable onPress={() => restoreTask(index)}>
+                <Ionicons name="refresh-circle" size={25} color="green" />
+              </Pressable>
+              </ThemedView>
+
             </ThemedView>
           ))}
         </ScrollView>

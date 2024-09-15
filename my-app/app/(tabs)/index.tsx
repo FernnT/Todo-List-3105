@@ -20,7 +20,12 @@ export default function HomeScreen() {
 
   
   return (
-   
+    <ScrollView
+    contentContainerStyle={{
+      flexGrow: 1
+    }}
+    keyboardShouldPersistTaps='handled'
+  >
     <ThemedView style = {styles.container} darkColor='#162427' lightColor='#E8EAED'>
     <ThemedView darkColor='#162427' lightColor='#E8EAED'>
       <ThemedText type='title' style = {styles.title}>TODO LIST!!</ThemedText>
@@ -30,32 +35,21 @@ export default function HomeScreen() {
 
     <ThemedView style={styles.content} darkColor='#162427' lightColor='#E8EAED' >
   
-    <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1
-        }}
-        keyboardShouldPersistTaps='handled'
-      >
+  
           {
             tasks.map((item, index) => (
               <ThemedView darkColor='#162427' lightColor='#E8EAED' key={index} style={{flexDirection:'column-reverse'}}>
               <Task title={item.title} todo={item.todo} isFinish={item.isFinish}/>
 
               <Pressable style={{justifyContent:"flex-end",flexDirection:"row"}} onPress={()=>archiveTask(index)}>
-                  <Ionicons name="archive" size={20} color="white" />
+                  <Ionicons name="archive" size={25} color="white" />
               </Pressable>
               </ThemedView>
             ))
           }
-        </ScrollView>
     </ThemedView>
-
-  
-
-
-    
   </ThemedView>
-
+  </ScrollView>
    
     
 
