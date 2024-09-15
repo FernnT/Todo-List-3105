@@ -13,10 +13,11 @@ export default function TabLayout() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inputs, setInputs] = useState<string[]>([""]);
   const [title, setTitle] = useState("");
-  const colorScheme = useColorScheme();
+  
   const { addTask } = useContext(TaskContext) ?? { addTask: () => {} };
-  const themeTextStyle =
-    colorScheme === "light" ? styles.lightThemeText : styles.darkThemeText;
+
+  const colorScheme = useColorScheme();
+  const themeTextStyle = colorScheme === "light" ? styles.lightThemeText : styles.darkThemeText;
   const themeTextColor = colorScheme === "light" ? "#242c40" : "#d0d0c0";
 
   function handleSubmit() {
