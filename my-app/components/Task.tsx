@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, Text, View,Button, Pressable, AppState} from 'react-native';
+import { Image, StyleSheet, Platform, Text, View,Button, Pressable, AppState, useColorScheme} from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useEffect, useState } from 'react';
@@ -17,10 +17,17 @@ interface taskProps {
   isArchived?: boolean;
 }
 
+
 function MyCheckbox({ checked, onPress }: { checked: boolean; onPress: () => void }) {
+
+  const colorScheme = useColorScheme();
+  const themeTextStyle =
+      colorScheme === "dark" ? style.darkThemeText : style.lightThemeText;
+  const themeTextColor = colorScheme === "light" ? "#242c40" : "white";
+  
   return (
     <Pressable
-      style={[style.checkboxBase, checked && style.checkboxChecked]}
+      style={[style.checkboxBase, checked && style.checkboxChecked, { borderColor: themeTextColor }]}
       onPress={onPress}>
       {checked && <Ionicons name="checkmark" size={20} color="white" />}
     </Pressable>
@@ -96,7 +103,7 @@ export default function Task(props: taskProps){
             alignItems: 'center',
             borderRadius: 4,
             borderWidth: 2,
-            borderColor: 'white',
+
             backgroundColor: 'transparent',
           },
           checkboxChecked: {
@@ -104,6 +111,13 @@ export default function Task(props: taskProps){
           }, crossedOut: {
             textDecorationLine: 'line-through',
             color: 'gray',
+          },  lightThemeText: {
+            color: "#242c40",
+            borderColor: "#979797",
+          },
+          darkThemeText: {
+            color: "#d0d0c0",
+            borderColor: "#979797",
           },
     })
 
