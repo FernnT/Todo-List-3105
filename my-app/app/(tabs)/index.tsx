@@ -1,10 +1,12 @@
-import { Image, StyleSheet, Platform, ScrollView, View } from 'react-native';
+import { Image, StyleSheet, Platform, ScrollView, View, Pressable } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Task from '@/components/Task';
 import { useContext, useState } from 'react';
 import { TaskContext } from '@/components/TaskContext';
+import { Ionicons } from '@expo/vector-icons';
+
 
 
 export default function HomeScreen() {
@@ -14,8 +16,7 @@ export default function HomeScreen() {
   if (!taskContext) {
     return null; // or handle the error appropriately
   }
-
-  const { tasks } = taskContext;
+  const { tasks, archiveTask } = taskContext;
 
   
   return (
@@ -35,14 +36,17 @@ export default function HomeScreen() {
         }}
         keyboardShouldPersistTaps='handled'
       >
-
           {
             tasks.map((item, index) => (
-              <Task key={index} title={item.title} todo={item.todo} />
+              <ThemedView darkColor='#162427' lightColor='#E8EAED' key={index} style={{flexDirection:'column-reverse'}}>
+              <Task title={item.title} todo={item.todo} isFinish={item.isFinish}/>
+
+              <Pressable style={{justifyContent:"flex-end",flexDirection:"row"}} onPress={()=>archiveTask(index)}>
+                  <Ionicons name="archive" size={20} color="white" />
+              </Pressable>
+              </ThemedView>
             ))
           }
-     
-
         </ScrollView>
     </ThemedView>
 

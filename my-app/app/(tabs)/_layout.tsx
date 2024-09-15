@@ -3,27 +3,41 @@ import React, { useContext, useState } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import {Button,Text,TextInput,View,StyleSheet,TouchableOpacity,} from "react-native";
+import {Button,Text,TextInput,View,StyleSheet,TouchableOpacity, Pressable,} from "react-native";
 import { Modal } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { TaskContext } from "@/components/TaskContext";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inputs, setInputs] = useState<string[]>([""]);
   const [title, setTitle] = useState("");
-  const colorScheme = useColorScheme();
+  
   const { addTask } = useContext(TaskContext) ?? { addTask: () => {} };
-  const themeTextStyle =
-    colorScheme === "light" ? styles.lightThemeText : styles.darkThemeText;
+
+  const colorScheme = useColorScheme();
+  const themeTextStyle = colorScheme === "light" ? styles.lightThemeText : styles.darkThemeText;
   const themeTextColor = colorScheme === "light" ? "#242c40" : "#d0d0c0";
+
+  interface  Activity{
+    name: string;
+    state: boolean;
+  }
+  interface Task {
+    title: string;
+    todo: Activity[];
+    isFinish: boolean;
+    isArtchived: boolean;
+  }
+  
 
   function handleSubmit() {
     const filteredInputs = inputs.filter(input => input.slice() !== "");
     if (filteredInputs.length === 0) return; // Prevent submission if all inputs are empty
-    const newTask = { title, todo: filteredInputs };
-    console.log(newTask);
+    const newTask = { title, todo: filteredInputs.map(input => ({ name: input, state: false })), isFinish: false , isArtchived: false};
+    // console.log(newTask);
     addTask(newTask);
     setIsModalVisible(false);
     setTitle("");
@@ -85,7 +99,7 @@ export default function TabLayout() {
             title: "Archive",
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                name={focused ? "code-slash" : "code-slash-outline"}
+                name={focused ? "archive" : "archive-outline"}
                 color={color}
               />
             ),
@@ -123,6 +137,7 @@ export default function TabLayout() {
 
               {inputs.map((input, index) => (
                 <ThemedView
+                  
                   style={{
                     padding: 0,
                     borderRadius: 10,
@@ -134,10 +149,11 @@ export default function TabLayout() {
                   lightColor="#E8EAED"
                   key={index}
                 >
-                  <TouchableOpacity onPress={() => removeListItem(index)}>
-                    <ThemedText style={{ color: "#FF0000" }}>X</ThemedText>
-                  </TouchableOpacity>
+                  <Pressable onPress={() => removeListItem(index)}  >
+                    <Ionicons name="close" size={20} color="red" />
+                  </Pressable>
                   <TextInput
+                
                     autoFocus={index === inputs.length - 1}
                     style={[styles.input, themeTextStyle]}
                     placeholderTextColor={themeTextColor}
@@ -151,7 +167,7 @@ export default function TabLayout() {
                   />
                 </ThemedView>
               ))}
-              <TouchableOpacity onPress={addListItem}>
+              <Pressable onPress={addListItem}>
                 <ThemedText
                   style={{
                     color: "#00C2FF",
@@ -161,28 +177,48 @@ export default function TabLayout() {
                 >
                   Add another
                 </ThemedText>
-              </TouchableOpacity>
+              </Pressable>
 
               <ThemedView
                 style={{
                   padding: 20,
                   borderRadius: 10,
                   flexDirection: "row",
-                  justifyContent: "space-evenly",
+                  justifyContent: "space-between",
                 }}
                 darkColor="#1C2D31"
                 lightColor="#E8EAED"
               >
-                <Button
-                  color="transparent"
-                  title="Close"
-                  onPress={() => setIsModalVisible(false)}
-                />
-                <Button
+                <Pressable onPress={() => setIsModalVisible(false)}>
+                  <ThemedText
+                    style={{
+                      color: "#00C2FF",
+                      textAlign: "center",
+                      marginTop: 10,
+                    }}
+                  >
+                    Cancel
+                  </ThemedText>
+                </Pressable>
+
+                <Pressable onPress={handleSubmit}>
+                  <ThemedText
+                    style={{
+                      backgroundColor: "#00C2FF",
+                      textAlign: "center",
+                      padding: 5,
+                      borderRadius: 4,
+                    }}
+                  >
+                    ADD TASK
+                  </ThemedText>
+                </Pressable>
+
+                {/* <Button
                   color="#00C2FF"
                   title="Add Task"
                   onPress={handleSubmit}
-                />
+                /> */}
               </ThemedView>
             </ThemedView>
           </ThemedView>
