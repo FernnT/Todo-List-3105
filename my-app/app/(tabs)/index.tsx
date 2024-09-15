@@ -8,6 +8,7 @@ import { TaskContext } from '@/components/TaskContext';
 import { Ionicons } from '@expo/vector-icons';
 
 
+
 export default function HomeScreen() {
 
   const taskContext = useContext(TaskContext);
@@ -15,7 +16,7 @@ export default function HomeScreen() {
   if (!taskContext) {
     return null; // or handle the error appropriately
   }
-  const { tasks, deleteTask } = taskContext;
+  const { tasks, archiveTask } = taskContext;
 
   
   return (
@@ -37,11 +38,11 @@ export default function HomeScreen() {
       >
           {
             tasks.map((item, index) => (
-              <ThemedView darkColor='#162427' lightColor='#E8EAED' key={index}>
-              <Task key={index} title={item.title} todo={item.todo} />
+              <ThemedView darkColor='#162427' lightColor='#E8EAED' key={index} style={{flexDirection:'column-reverse'}}>
+              <Task title={item.title} todo={item.todo} isFinish={item.isFinish}/>
 
-              <Pressable key={index} style={{justifyContent:"flex-end",flexDirection:"row",marginRight:10,}}>
-                  <Ionicons name="trash" size={20} color="white" key={index}  onPress={()=>deleteTask(index)}/>
+              <Pressable style={{justifyContent:"flex-end",flexDirection:"row"}} onPress={()=>archiveTask(index)}>
+                  <Ionicons name="archive" size={20} color="white" />
               </Pressable>
               </ThemedView>
             ))
