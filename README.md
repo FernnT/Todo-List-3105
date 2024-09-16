@@ -1,4 +1,4 @@
-##TODO LIST APP
+#TODO LIST APP
  A simple Expo Todo List app
 
 ##DEMO AND SCREENSHOTS
