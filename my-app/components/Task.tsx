@@ -38,18 +38,23 @@ export default function Task(props: taskProps){
   const [todo, setTodo] = useState<Activity[]>(props.todo);
   const [aState, setAState] = useState(false);
 
+
   useEffect(() => {
-    const allStates = todo.map(item => item.state);
-    const allTrue = allStates.every(Boolean);
-   // console.log(allTrue)
-    setAState(allTrue);
+    if (todo.length > 0) {
+      const allFinished = todo.every(item => item.state);
+      setAState(allFinished);
+    } else {
+      setAState(false);
+    }
   }, [todo]);
+  
+  useEffect(() => {
+    setTodo(props.todo);
+  }, [props.todo]);
 
   function handleCheckboxPress(index: number) { 
     if (props.isArchived) return;
-    const newTodo = [...todo];
-    newTodo[index].state = !newTodo[index].state;
-    setTodo(newTodo);
+    setTodo(todo.map((item, i) => (i === index ? { ...item, state: !item.state } : item)));
   }
 
   function handleMassCheck() {
@@ -59,7 +64,7 @@ export default function Task(props: taskProps){
     const newTodo = todo.map(item => ({...item, state: !trues}));
     setTodo(newTodo);
     setAState(aState);
-    // console.log(todo)
+   
   }
 
     return(

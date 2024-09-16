@@ -39,7 +39,7 @@ export default function TabLayout() {
     title: string;
     todo: Activity[];
     isFinish: boolean;
-    isArtchived: boolean;
+    isArchived: boolean;
   }
 
   function handleSubmit() {
@@ -49,7 +49,7 @@ export default function TabLayout() {
       title,
       todo: filteredInputs.map((input) => ({ name: input, state: false })),
       isFinish: false,
-      isArtchived: false,
+      isArchived: false,
     };
     // console.log(newTask);
     addTask(newTask);
