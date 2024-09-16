@@ -3,7 +3,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Task from '@/components/Task';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TaskContext } from '@/components/TaskContext';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -16,10 +16,14 @@ export default function HomeScreen() {
   if (!taskContext) {
     return null; // or handle the error appropriately
   }
-  const { tasks, archiveTask } = taskContext;
-
+  const { tasks, archiveTask,archivedTasks } = taskContext;
   
-  return (
+ 
+  useEffect(() => {
+    
+  }, [tasks]);
+ 
+  return ( 
     <ScrollView
     contentContainerStyle={{
       flexGrow: 1
@@ -34,8 +38,7 @@ export default function HomeScreen() {
     </ThemedView>
 
     <ThemedView style={styles.content} darkColor='#162427' lightColor='#E8EAED' >
-  
-  
+   
           {
             tasks.map((item, index) => (
               <ThemedView darkColor='#162427' lightColor='#E8EAED' key={index} style={{flexDirection:'column-reverse'}}>
@@ -51,7 +54,7 @@ export default function HomeScreen() {
   </ThemedView>
   </ScrollView>
    
-    
+
 
   );
 }
